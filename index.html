@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#faf6f0">
+  <title>Travellers Taste — Stay somewhere that feels like you</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #faf6f0;
+      --paper-deep: #f2ece3;
+      --card: #fffdf9;
+      --ink: #2b2622;
+      --muted: #81776e;
+      --line: #e7ded3;
+      --terracotta: #c4623a;
+      --terracotta-dark: #a94d2d;
+      --olive: #4f6b4a;
+      --olive-pale: #e8eee3;
+      --amber: #c99a3b;
+      --amber-pale: #f5edda;
+      --serif: "Fraunces", Georgia, serif;
+      --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --shadow: 0 18px 48px rgba(67, 48, 33, .08);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    button, input, textarea { font: inherit; }
+    button { color: inherit; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+      outline: 3px solid rgba(196, 98, 58, .38);
+      outline-offset: 3px;
+    }
+    .topbar {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(22px, 5vw, 76px);
+      border-bottom: 1px solid rgba(231, 222, 211, .85);
+      background: rgba(250, 246, 240, .88);
+    }
+    .brand { display: flex; align-items: center; gap: 11px; }
+    .brand-mark {
+      width: 32px; height: 32px; border-radius: 50% 50% 47% 12%;
+      background: var(--terracotta); color: white; display: grid; place-items: center;
+      transform: rotate(-8deg); font-family: var(--sans); font-size: 20px; font-weight: 600;
+    }
+    .brand-name { font: 600 16px var(--sans); letter-spacing: -.3px; }
+    .top-context { display: flex; align-items: center; gap: 18px; color: var(--muted); font-size: 12px; }
+    .avatar {
+      width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+      background: #ead8c8; color: #684b3a; font-size: 12px; font-weight: 600;
+    }
+    main { max-width: 1160px; min-height: calc(100vh - 76px); margin: 0 auto; padding: 76px 36px 130px; }
+    .screen { display: none; animation: appear .28s ease both; }
+    .screen.active { display: block; }
+    .prototype-footer { margin-top: 54px; padding-top: 13px; border-top: 1px solid #eae2d8; color: var(--muted); font-size: 9px; letter-spacing: .25px; }
+    @keyframes appear { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+    .eyebrow { color: var(--terracotta); font-size: 11px; font-weight: 700; letter-spacing: 1.45px; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3 { font-family: var(--serif); font-weight: 400; letter-spacing: -.7px; }
+    h1 { max-width: 760px; margin: 10px 0 12px; font-size: clamp(38px, 5vw, 58px); line-height: 1.08; }
+    h2 { font-size: clamp(34px, 4vw, 46px); line-height: 1.12; margin: 10px 0 12px; }
+    h3 { font-size: 25px; line-height: 1.18; margin-bottom: 5px; }
+    .lede { color: var(--muted); font-size: 15px; max-width: 620px; }
+    .section-heading { margin-bottom: 40px; }
+    .section-heading p { margin-bottom: 0; }
+    .card {
+      background: transparent; border: 0; border-radius: 0; box-shadow: none;
+    }
+    .btn {
+      display: inline-flex; justify-content: center; align-items: center; gap: 9px;
+      min-height: 46px; padding: 0 20px; border-radius: 7px; border: 1px solid transparent;
+      cursor: pointer; font-weight: 600; transition: background .18s, color .18s, border-color .18s;
+    }
+    .btn-primary { color: white; background: var(--terracotta); }
+    .btn-primary:hover { background: var(--terracotta-dark); }
+    .btn-secondary { color: var(--ink); background: var(--card); border-color: var(--line); }
+    .btn-secondary:hover { border-color: #c9b8a6; background: #fffaf3; }
+    .btn-quiet { min-height: 38px; padding: 0 12px; color: var(--terracotta-dark); background: transparent; border-color: transparent; }
+    .btn-quiet:hover { background: #f7eee7; }
+    .btn-small { min-height: 36px; font-size: 12px; padding: 0 13px; }
+    .text-link { color: var(--terracotta-dark); border: 0; background: none; padding: 4px; cursor: pointer; font-weight: 600; }
+    .text-link:hover { text-decoration: underline; }
+    .pill {
+      display: inline-flex; align-items: center; gap: 5px; padding: 2px 0; border-radius: 0;
+      font-size: 9px; line-height: 1.4; font-weight: 500;
+    }
+    .pill.verified { background: transparent; color: #5f7259; }
+    .pill.uncertain { background: transparent; color: #8c774e; }
+    .pill.verified::before, .pill.uncertain::before { content: ""; width: 5px; height: 5px; flex: 0 0 5px; border-radius: 50%; background: currentColor; }
+    .pill.neutral { background: #f2ede6; color: #756c63; }
+    .muted { color: var(--muted); }
+    .small { font-size: 11px; }
+    .rule { height: 1px; background: var(--line); margin: 18px 0; }
+
+    /* Screen 1: describe the feeling and choose visual cues. */
+    .onboard-wrap { max-width: 890px; margin: 0 auto; }
+    .prompt-box {
+      width: 100%; min-height: 150px; resize: vertical; padding: 22px 24px; margin: 30px 0 12px;
+      color: var(--ink); background: var(--card); border: 0; border-radius: 10px;
+      font: 400 16px/1.75 var(--sans); box-shadow: none;
+    }
+    .microcopy { color: var(--muted); font-size: 11px; }
+    .tile-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 42px 0 17px; }
+    .tile-heading h3 { font: 600 12px var(--sans); letter-spacing: .25px; margin: 0; }
+    .mood-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 11px; }
+    .mood-tile {
+      min-height: 111px; position: relative; overflow: hidden; display: flex; align-items: flex-end;
+      padding: 14px; text-align: left; border: 0; border-radius: 9px;
+      cursor: pointer; background: #807263; isolation: isolate; transition: box-shadow .18s;
+    }
+    .mood-tile::before {
+      content: ""; position: absolute; z-index: 1; inset: 0;
+      background: linear-gradient(180deg, transparent 25%, rgba(35, 29, 25, .58) 100%);
+    }
+    .mood-tile img { position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .mood-tile:hover { box-shadow: var(--shadow); }
+    .mood-tile span { position: relative; z-index: 2; color: white; font-size: 12px; font-weight: 600; text-shadow: 0 1px 5px rgba(0,0,0,.2); }
+    .mood-tile em {
+      position: absolute; z-index: 2; right: 8px; top: 8px; padding: 4px 7px; border-radius: 99px;
+      background: rgba(255,253,249,.94); color: var(--ink); font-size: 9px; font-style: normal; font-weight: 700;
+    }
+    .mood-tile.yes { box-shadow: inset 0 0 0 2px var(--olive); }
+    .mood-tile.no { box-shadow: inset 0 0 0 2px var(--terracotta); filter: saturate(.65); }
+    .basics-row { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin: 32px 0 34px; }
+    .basic-item {
+      display: inline-flex; align-items: center; gap: 8px; padding: 4px 0; border: 0;
+      background: transparent; border-radius: 0; color: #635a52; font-size: 11px;
+    }
+    .basic-item strong { color: var(--ink); font-weight: 600; }
+    .onboard-footer { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+
+    /* Screen 2: user-editable signals and per-word importance. */
+    .profile-list { display: grid; gap: 0; }
+    .profile-card { padding: 26px 0 24px; border-bottom: 1px solid #eae2d8; }
+    .profile-top { display: grid; grid-template-columns: 160px 1fr; gap: 20px; align-items: start; }
+    .word-label { font: 600 16px var(--sans); }
+    .word-hint { display: block; color: var(--muted); font-size: 10px; margin-top: 3px; }
+    .chips { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
+    .signal-chip {
+      display: inline-flex; align-items: center; gap: 7px; min-height: 30px; padding: 4px 9px;
+      color: #554c44; background: #f3eee6; border: 0; border-radius: 99px; font-size: 11px;
+    }
+    .chip-confirm {
+      display: inline-grid; place-items: center; width: 17px; height: 17px; padding: 0; border: 1px solid #d6d0c8;
+      border-radius: 50%; color: #82786f; background: transparent; cursor: pointer; font-size: 10px; line-height: 1;
+    }
+    .chip-confirm.active { color: white; background: var(--olive); border-color: var(--olive); }
+    .chip-confirm:hover { border-color: var(--olive); }
+    .chip-remove {
+      display: inline-grid; place-items: center; width: 15px; height: 15px; padding: 0; border: 0;
+      border-radius: 50%; color: #8a7e72; background: transparent; cursor: pointer; font-size: 14px; line-height: 1;
+    }
+    .chip-remove:hover { color: var(--terracotta-dark); background: white; }
+    .add-chip { min-height: 30px; padding: 3px 10px; color: var(--terracotta-dark); background: transparent; border: 1px dashed #d7aa95; border-radius: 99px; cursor: pointer; font-size: 11px; }
+    .importance { display: grid; grid-template-columns: 160px 1fr auto; align-items: center; gap: 20px; margin-top: 15px; }
+    .importance label { color: var(--muted); font-size: 10px; }
+    input[type="range"] { width: 100%; accent-color: var(--terracotta); cursor: pointer; }
+    .importance-value { min-width: 77px; text-align: right; color: var(--muted); font-size: 10px; }
+    .remember-note { margin: 26px 0; padding: 15px 17px; border: 0; background: #edf0e9; color: #53614e; border-radius: 7px; font-size: 12px; }
+    .screen-actions { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-top: 30px; }
+
+    /* Screen 3: compact results and an illustrative, local SVG map. */
+    .results-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 28px; margin-bottom: 38px; }
+    .results-head h2 { max-width: 650px; }
+    .view-switch { display: inline-flex; padding: 4px; background: #eee8df; border-radius: 8px; flex-shrink: 0; }
+    .view-switch button { border: 0; padding: 8px 12px; color: #766d64; background: transparent; border-radius: 5px; cursor: pointer; font-size: 11px; }
+    .view-switch button.selected { background: var(--card); color: var(--ink); box-shadow: 0 2px 5px rgba(45,35,27,.08); }
+    .results-grid { display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 34px; row-gap: 42px; }
+    .stay-card { overflow: hidden; padding-bottom: 8px; }
+    .stay-photo {
+      height: 158px; position: relative; display: flex; align-items: flex-end; padding: 12px 14px;
+      overflow: hidden; background: #a89a88; isolation: isolate;
+    }
+    .stay-photo::before { content: ""; position: absolute; z-index: 1; inset: 0; background: linear-gradient(180deg, transparent 25%, rgba(35,29,25,.58)); pointer-events: none; }
+    .stay-photo img { position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .photo-label { position: relative; z-index: 2; color: white; font-size: 10px; font-weight: 600; letter-spacing: .2px; }
+    .price-tag { position: absolute; z-index: 2; top: 11px; right: 11px; padding: 6px 9px; background: rgba(255,253,249,.94); border-radius: 6px; font-size: 12px; font-weight: 700; }
+    .stay-body { padding: 20px 6px 12px; }
+    .stay-title-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .stay-title-row h3 { font-size: 23px; margin: 0 0 3px; }
+    .location { color: var(--muted); font-size: 11px; }
+    .fit-caption { margin: 15px 0 7px; color: var(--muted); font-size: 10px; font-weight: 600; }
+    .fit-bars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
+    .fit-item { min-width: 0; }
+    .fit-label { display: flex; justify-content: space-between; color: #756b62; font-size: 9px; margin-bottom: 4px; }
+    .fit-track { height: 5px; overflow: hidden; border-radius: 99px; background: #eee8df; }
+    .fit-fill { height: 100%; border-radius: inherit; background: #87967a; }
+    .fit-fill.thin { background: var(--amber); }
+    .fit-status { color: var(--olive); font-size: 9px; white-space: nowrap; }
+    .fit-status.uncertain { color: #9a7423; }
+    .evidence-source { margin: 9px 0 0; color: var(--muted); font-size: 9px; line-height: 1.55; }
+    details.why { margin-top: 13px; padding-top: 11px; border-top: 1px solid #f0e9e1; }
+    details.why summary { color: var(--terracotta-dark); cursor: pointer; font-size: 11px; font-weight: 600; list-style: none; }
+    details.why summary::-webkit-details-marker { display: none; }
+    details.why summary::after { content: "+"; float: right; font-size: 15px; line-height: 12px; }
+    details.why[open] summary::after { content: "−"; }
+    .quote-list { display: grid; gap: 8px; padding-top: 11px; }
+    blockquote { margin: 0; padding-left: 10px; border-left: 1px solid #d8c7b7; color: #51483f; font: 400 12px/1.6 var(--sans); }
+    blockquote cite { display: block; margin-top: 3px; color: var(--muted); font: normal 9px var(--sans); }
+    .match-note { margin: 10px 0 0; padding: 9px; background: #f7f3ec; border-radius: 6px; color: #71675e; font-size: 10px; }
+    .trust-row { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 15px 0 10px; }
+    .couldnt-check { color: #796e64; font-size: 10px; margin: 8px 0 12px; }
+    .stay-actions { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .map-panel { display: none; min-height: 565px; overflow: hidden; position: relative; background: #e9e3d7; border: 1px solid var(--line); border-radius: 12px; }
+    .map-panel.visible { display: block; }
+    .results-grid.hidden { display: none; }
+    .map-svg { width: 100%; height: 565px; display: block; }
+    .map-legend { position: absolute; left: 15px; bottom: 15px; padding: 12px 14px; border-radius: 8px; background: rgba(255,253,249,.94); font-size: 10px; box-shadow: var(--shadow); }
+    .map-legend .cell-source { display: block; }
+    .map-pin { cursor: pointer; }
+    .map-pin circle.pin { fill: var(--terracotta); stroke: white; stroke-width: 3; }
+    .map-pin text { fill: white; font: 600 11px var(--sans); text-anchor: middle; dominant-baseline: central; }
+    .map-pin:hover circle.pin { fill: var(--terracotta-dark); r: 17px; }
+
+    /* Screen 4: comparison board with sortable, draggable columns. */
+    .board-tools { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin: 34px 0 24px; }
+    .importance-tools { display: flex; flex-wrap: wrap; gap: 12px; }
+    .importance-mini { width: 135px; }
+    .importance-mini label { display: flex; justify-content: space-between; color: #756b62; font-size: 9px; }
+    .importance-mini input { display: block; margin: 5px 0 0; }
+    .board-scroll { overflow-x: auto; padding-bottom: 9px; }
+    .board { display: grid; grid-template-columns: 152px repeat(3, minmax(190px, 1fr)); min-width: 760px; }
+    .board-cell {
+      position: relative;
+      min-height: 54px; padding: 12px 13px; display: flex; align-items: center;
+      border-bottom: 1px solid #eae2d8; border-right: 0; background: transparent;
+      font-size: 11px;
+    }
+    .board-cell:nth-child(4n + 1) { border-left: 0; }
+    .board-cell.board-head { min-height: 191px; display: block; padding: 10px 16px 18px; background: transparent; }
+    .board-cell.row-label { color: #776d64; font-size: 10px; font-weight: 600; background: transparent; }
+    .board-cell.row-label:first-child { border-top-left-radius: 0; }
+    .board-head.dragging { opacity: .48; }
+    .board-head.drag-over { box-shadow: inset 3px 0 var(--terracotta); }
+    .board-thumb { height: 82px; position: relative; overflow: hidden; margin-bottom: 13px; border-radius: 7px; background: #a89a88; }
+    .board-thumb::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 35%, rgba(35,29,25,.48)); pointer-events: none; }
+    .board-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .board-name { font: 600 13px/1.4 var(--sans); }
+    .board-area { color: var(--muted); font-size: 9px; margin-top: 4px; }
+    .board-head-tools { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+    .drag-hint { color: #93877b; font-size: 9px; }
+    .remove-place { width: 25px; height: 25px; border: 1px solid var(--line); border-radius: 50%; background: white; cursor: pointer; color: #796e64; }
+    .remove-place:hover { color: var(--terracotta-dark); border-color: #d5a38e; }
+    .cell-score { width: 100%; display: grid; grid-template-columns: 1fr; gap: 5px; }
+    .cell-score .fit-track { flex: 1; }
+    .board-head .couldnt-check { margin: 9px 0 0; font-size: 9px; line-height: 1.5; }
+    .board .cell-source {
+      position: absolute; z-index: 5; top: 4px; left: 4px; display: none; width: max-content;
+      max-width: min(250px, calc(100vw - 140px)); margin: 0; padding: 5px 7px;
+      color: var(--ink); background: rgba(255,253,249,.98); border: 1px solid var(--line);
+      border-radius: 5px; box-shadow: 0 4px 12px rgba(43,38,34,.12); font-size: 9px; line-height: 1.4;
+      white-space: normal; pointer-events: none;
+    }
+    .board-cell[data-source-cell] { cursor: pointer; }
+    .board-cell[data-source-cell]:hover { background: rgba(242,236,227,.48); }
+    .board-cell:hover .cell-source, .board-cell:focus .cell-source, .board-cell:focus-within .cell-source, .board-cell.source-open .cell-source { display: block; }
+    .fit-status { display: block; color: var(--olive); font-size: 10px; line-height: 1.3; }
+    .fit-status.uncertain { color: #9a7423; }
+    .stay-actions { flex-wrap: wrap; }
+    .undo-button { margin-left: 12px; padding: 2px 4px; color: #f1c3a8; background: transparent; border: 0; cursor: pointer; font-weight: 600; text-decoration: underline; }
+    .undo-button:hover { color: white; }
+    .ranking-link { display: inline-block; margin-top: -5px; font-size: 10px; }
+    .price-cell { font: 600 13px var(--sans); }
+    .prompt-inline { display: none; align-items: center; flex-wrap: wrap; gap: 8px; margin: 16px 0; padding: 13px 15px; border: 1px solid #ead9c9; border-radius: 9px; background: #fff8f0; font-size: 11px; }
+    .prompt-inline.visible { display: flex; }
+    .reason-chip { border: 1px solid #e5d5c6; background: var(--card); border-radius: 99px; padding: 6px 10px; cursor: pointer; font-size: 10px; }
+    .reason-chip:hover { border-color: var(--terracotta); color: var(--terracotta-dark); }
+    .partner-note { margin: 16px 0 0; color: var(--muted); font-size: 10px; }
+    .empty-board { grid-column: 1 / -1; padding: 34px; text-align: center; background: var(--card); border: 1px dashed var(--line); border-radius: 10px; }
+    .mobile-board-hint { display: none; }
+
+    /* Screen 5: decisive differences only. */
+    .last-two-label { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 7px; color: var(--terracotta-dark); font-size: 11px; font-weight: 600; }
+    .difference-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 42px 0 26px; }
+    .difference-card { padding: 25px 24px; background: #f2ece3; border-radius: 9px; }
+    .difference-card h3 { margin-bottom: 10px; }
+    .difference-card p { margin-bottom: 0; color: #5e554c; font-size: 13px; }
+    .difference-card .evidence-source { margin-top: 15px; }
+    .difference-card .couldnt-check { padding-top: 10px; border-top: 1px solid rgba(43,38,34,.08); }
+    .same-details { margin: 0 0 26px; padding: 0; }
+    .same-details summary { padding: 15px 0; color: #71675e; cursor: pointer; font-size: 12px; font-weight: 600; }
+    .same-content { display: flex; flex-wrap: wrap; gap: 7px; padding-bottom: 16px; }
+    .price-watch { display: flex; gap: 13px; align-items: flex-start; margin: 26px 0; padding: 18px 20px; border: 0; border-radius: 8px; background: #f5efdf; }
+    .price-watch .watch-icon { font-size: 18px; }
+    .price-watch strong { font-size: 12px; }
+    .price-watch p { margin: 2px 0 0; color: #776b54; font-size: 11px; }
+    .direct-note { padding: 15px 0; border-left: 0; border-top: 1px solid #dce4d6; background: transparent; border-radius: 0; color: #4c5d46; font-size: 12px; }
+    .decide-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+    .not-two { padding: 26px 0; background: transparent; border: 0; border-radius: 0; }
+
+    /* Screen 6: a small continuity moment for a returning traveller. */
+    .welcome-layout { display: grid; grid-template-columns: 1fr 330px; gap: 40px; align-items: start; }
+    .memory-card { padding: 22px 0; }
+    .memory-title { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+    .memory-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: #eee4d7; font-size: 16px; }
+    .memory-title h3 { margin: 0; font-size: 20px; }
+    .memory-summary { padding: 17px 0; background: transparent; border-radius: 0; font: 400 13px/1.75 var(--sans); }
+    .memory-row { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #eee8df; }
+    .memory-row:last-child { border: 0; }
+    .memory-row strong { font-size: 11px; }
+    .memory-row span { display: block; color: var(--muted); font-size: 10px; margin-top: 2px; }
+    .memory-actions { display: flex; gap: 6px; }
+    .memory-actions .btn { min-height: 31px; padding: 0 9px; font-size: 9px; }
+    .trip-card { padding: 28px; background: #ece9dc; border: 0; border-radius: 10px; }
+    .trip-card .eyebrow { color: #777554; }
+    .trip-card h3 { margin: 11px 0 8px; font-size: 28px; }
+    .trip-card p { color: #6c6857; font-size: 11px; }
+    .memory-learned { margin-top: 18px; }
+    .learned-label { color: var(--muted); font-size: 10px; margin-bottom: 8px; }
+
+    /* Screen facilitator menu, modal sheet, and toast. */
+    .screen-menu {
+      position: fixed; z-index: 20; left: 16px; bottom: 16px; display: flex; align-items: center; gap: 8px;
+      padding: 7px 9px 7px 11px; border: 1px solid rgba(231,222,211,.95); border-radius: 9px;
+      background: rgba(255,253,249,.94); box-shadow: 0 8px 28px rgba(58,43,32,.1); backdrop-filter: blur(10px);
+    }
+    .menu-label { color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: .65px; text-transform: uppercase; }
+    .screen-menu select { max-width: 160px; padding: 5px 24px 5px 8px; color: var(--ink); background: transparent; border: 0; font-size: 10px; cursor: pointer; }
+    .modal-backdrop { display: none; position: fixed; z-index: 30; inset: 0; padding: 20px; align-items: center; justify-content: center; background: rgba(43,38,34,.34); backdrop-filter: blur(3px); }
+    .modal-backdrop.visible { display: flex; animation: appear .18s ease both; }
+    .modal { width: min(100%, 440px); padding: 28px; background: var(--card); border: 0; border-radius: 12px; box-shadow: 0 25px 70px rgba(43,38,34,.2); }
+    .modal-head { display: flex; justify-content: space-between; align-items: start; gap: 20px; }
+    .modal-head h3 { margin: 0 0 6px; }
+    .modal-close { width: 30px; height: 30px; border: 0; border-radius: 50%; background: #f4eee6; cursor: pointer; font-size: 18px; }
+    .share-link { display: flex; gap: 7px; margin: 18px 0 9px; }
+    .share-link input { flex: 1; min-width: 0; padding: 11px; border: 1px solid var(--line); border-radius: 6px; color: var(--muted); background: #f9f6f1; font-size: 11px; }
+    .vote-place { display: grid; grid-template-columns: 1fr auto auto; gap: 7px; align-items: center; padding: 14px 0; border-bottom: 1px solid #f0e9e1; }
+    .vote-place strong { font: 600 12px var(--sans); }
+    .partner-vote { color: var(--olive); font-size: 12px; }
+    .vote-btn { min-width: 38px; min-height: 32px; border: 1px solid var(--line); border-radius: 6px; background: white; cursor: pointer; }
+    .vote-btn.selected { background: var(--olive-pale); border-color: #adc0a5; }
+    .toast {
+      position: fixed; z-index: 40; left: 50%; bottom: 75px; transform: translate(-50%, 12px);
+      max-width: calc(100% - 32px); padding: 11px 16px; border-radius: 8px; background: var(--ink);
+      color: white; font-size: 11px; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: .2s;
+    }
+    .toast.visible { opacity: 1; transform: translate(-50%, 0); }
+    .toast.visible { pointer-events: auto; }
+    .board-cell { transition: background .15s; }
+    .board-cell.sorting { transition: transform .24s ease; }
+    .result-empty { grid-column: 1 / -1; padding: 25px 0; color: var(--muted); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+    @media (max-width: 760px) {
+      .topbar { height: 62px; padding: 0 18px; }
+      .top-context { gap: 10px; }
+      .top-context .context-detail { display: none; }
+      main { padding: 48px 18px 116px; }
+      .results-head { display: block; }
+      .results-head .view-switch { margin-top: 14px; }
+      .mood-grid { grid-template-columns: repeat(2, 1fr); gap: 9px; }
+      .mood-tile { min-height: 100px; }
+      .profile-top { grid-template-columns: 1fr; gap: 10px; }
+      .importance { grid-template-columns: 1fr auto; gap: 8px 14px; }
+      .importance label { grid-column: 1 / -1; }
+      .importance input { grid-column: 1; }
+      .importance-value { grid-column: 2; }
+      .results-grid { grid-template-columns: 1fr; }
+      .stay-photo { height: 170px; }
+      .board-tools { align-items: flex-start; flex-direction: column; }
+      .difference-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .difference-card { padding: 16px 12px; }
+      .difference-card h3 { font-size: 19px; overflow-wrap: anywhere; }
+      .difference-card p { font-size: 11px; }
+      .difference-card .evidence-source, .difference-card .couldnt-check { font-size: 9px; }
+      .welcome-layout { grid-template-columns: 1fr; gap: 18px; }
+      .welcome-layout > * { min-width: 0; }
+      .trip-card { max-width: none; }
+      .screen-menu { left: 10px; bottom: 10px; }
+    }
+    @media (max-width: 420px) {
+      .brand-name { font-size: 17px; }
+      .brand-mark { width: 29px; height: 29px; }
+      .avatar { width: 30px; height: 30px; }
+      main { padding-left: 15px; padding-right: 15px; }
+      h1 { font-size: 39px; }
+      h2 { font-size: 35px; }
+      .basics-row { gap: 6px; }
+      .basic-item { padding: 7px 9px; font-size: 10px; }
+      .onboard-footer { align-items: flex-start; flex-direction: column; }
+      .onboard-footer .btn { width: 100%; }
+      .profile-card { padding: 22px 0; }
+      .importance-mini { width: calc(50% - 7px); }
+      .board-cell.board-head { padding: 8px; }
+      .board-scroll { max-width: 100%; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
+      .board { width: max-content; min-width: 0; grid-template-columns: 112px repeat(3, minmax(220px, 1fr)); }
+      .board-cell.row-label { position: sticky; left: 0; z-index: 2; background: var(--paper); box-shadow: 1px 0 0 rgba(231,222,211,.9); }
+      .board-cell.board-head.row-label { z-index: 3; }
+      .board-cell.board-head:not(.row-label) { scroll-snap-align: start; }
+      .mobile-board-hint { display: block; margin: 0 0 8px; color: var(--muted); font-size: 10px; }
+      .screen-menu { gap: 4px; padding-left: 8px; }
+      .screen-menu select { max-width: 138px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand" aria-label="Travellers Taste home">
+      <span class="brand-mark" aria-hidden="true">t</span>
+      <span class="brand-name">Travellers Taste</span>
+    </div>
+    <div class="top-context">
+      <span class="context-detail">A more considered way to stay</span>
+      <span class="avatar" aria-label="Sam">S</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="screen active" id="screen-feel" aria-labelledby="feel-title">
+      <div class="onboard-wrap">
+        <div class="eyebrow">A little about your trip</div>
+        <h1 id="feel-title">Tell me how you want your stay to feel.</h1>
+        <p class="lede">Forget the star rating for a moment. What would make it feel like <em>your</em> kind of place?</p>
+        <label class="sr-only" for="feeling-input">Describe how you want your stay to feel</label>
+        <textarea class="prompt-box" id="feeling-input">Somewhere quiet, cosy, with character — like someone actually cares about it, not a plain apartment.</textarea>
+        <div class="microcopy">A rough sentence is perfect. I’ll help translate it into things we can look for.</div>
+
+        <div class="tile-heading">
+          <h3>Are any of these your kind of place?</h3>
+          <span class="microcopy">Tap once for yes · twice for no · again to clear</span>
+        </div>
+        <div class="mood-grid" id="mood-grid" aria-label="Optional visual preferences"></div>
+        <div class="basics-row">
+          <div class="basic-item"><span aria-hidden="true">⌑</span><strong id="trip-dates">May 14–18</strong> · <span id="trip-nights">4 nights</span></div>
+          <div class="basic-item"><span aria-hidden="true">♧</span><strong id="trip-guests">2 guests</strong> · you &amp; your partner</div>
+          <div class="basic-item"><span aria-hidden="true">€</span><strong id="trip-budget">About €120</strong> / night</div>
+          <button class="text-link" type="button" data-action="edit-basics">Edit details</button>
+        </div>
+        <div class="onboard-footer">
+          <span class="microcopy">No listings yet. Just getting to know your taste.</span>
+          <button class="btn btn-primary" type="button" data-go="profile">Show me what you understood <span aria-hidden="true">→</span></button>
+        </div>
+      </div>
+      <footer class="prototype-footer">Prototype · sample data</footer>
+    </section>
+
+    <section class="screen" id="screen-profile" aria-labelledby="profile-title">
+      <div class="section-heading">
+        <div class="eyebrow">Your words, made useful</div>
+        <h2 id="profile-title">Here’s what I think you mean.</h2>
+        <p class="lede">I’ve turned your words into things I can actually check. Keep, change or add anything.</p>
+      </div>
+      <div class="profile-list" id="profile-list"></div>
+      <div class="remember-note">♡ &nbsp;I’ll remember this for future trips. You can change it any time.</div>
+      <div class="screen-actions">
+        <button class="btn btn-secondary" type="button" data-go="feel">← Back to your words</button>
+        <button class="btn btn-primary" type="button" data-go="results">Find places <span aria-hidden="true">→</span></button>
+      </div>
+      <footer class="prototype-footer">Prototype · sample data</footer>
+    </section>
+
+    <section class="screen" id="screen-results" aria-labelledby="results-title">
+      <div class="results-head">
+        <div>
+          <div class="eyebrow">Porto · May 14–18 · for Sam</div>
+          <h2 id="results-title">4 places that fit how you described it</h2>
+          <p class="lede">I did the searching and checking. Here are four different kinds of right.</p>
+        </div>
+        <div class="view-switch" role="group" aria-label="Choose results view">
+          <button class="selected" type="button" data-view="list">☷ &nbsp;List</button>
+          <button type="button" data-view="map">⌖ &nbsp;Map</button>
+        </div>
+      </div>
+      <button class="text-link ranking-link" type="button" data-action="ranking-help">How Travellers Taste ranks places</button>
+      <div class="results-grid" id="results-grid"></div>
+      <div class="map-panel" id="map-panel" aria-label="Illustrated map of sample Porto stays">
+        <svg class="map-svg" viewBox="0 0 900 565" role="img" aria-labelledby="map-title map-desc">
+          <title id="map-title">Illustrated map of Porto</title>
+          <desc id="map-desc">Four sample accommodation pins in a softly shaded quiet area.</desc>
+          <rect width="900" height="565" fill="#ebe5d9"/>
+          <path d="M0 425 C160 380 180 470 320 415 S540 390 650 424 S790 463 900 395 L900 565 L0 565Z" fill="#b9d0c9"/>
+          <path d="M0 409 C160 364 188 453 320 399 S540 374 650 407 S790 446 900 380" fill="none" stroke="#f9f6ef" stroke-width="23" opacity=".9"/>
+          <path d="M235 80 C390 40 555 95 625 190 C695 285 600 390 488 390 C378 390 290 325 208 265 C135 210 150 115 235 80Z" fill="#a6b79a" opacity=".33" stroke="#768d6c" stroke-width="2" stroke-dasharray="6 6"/>
+          <g fill="none" stroke="#fffaf2" stroke-linecap="round" opacity=".94">
+            <path d="M55 65 H818 M20 128 H790 M45 194 H840 M8 260 H815 M36 326 H870 M0 390 H800" stroke-width="12"/>
+            <path d="M92 28 V402 M190 0 V420 M288 20 V408 M386 0 V416 M484 16 V410 M582 0 V416 M680 18 V408 M778 0 V410" stroke-width="11"/>
+            <path d="M52 96 H820 M30 226 H830 M10 292 H850 M58 357 H810" stroke-width="5" opacity=".8"/>
+            <path d="M140 14 V412 M238 8 V410 M336 5 V412 M434 10 V410 M532 6 V412 M630 10 V408 M728 4 V414" stroke-width="5" opacity=".8"/>
+          </g>
+          <text x="380" y="104" fill="#617458" font-family="Inter, sans-serif" font-size="12" font-weight="600">QUIETER STREETS</text>
+          <text x="155" y="164" fill="#80766a" font-family="Inter, sans-serif" font-size="13">Cedofeita</text>
+          <text x="470" y="188" fill="#80766a" font-family="Inter, sans-serif" font-size="13">Sé</text>
+          <text x="565" y="316" fill="#80766a" font-family="Inter, sans-serif" font-size="13">Ribeira</text>
+          <text x="300" y="330" fill="#80766a" font-family="Inter, sans-serif" font-size="13">Clérigos</text>
+          <text x="300" y="510" fill="#587d77" font-family="Inter, sans-serif" font-size="12" font-weight="600">DOURO</text>
+          <g class="map-pin" data-place="casa-do-limoeiro" transform="translate(302 163)" tabindex="0" role="button" aria-label="Open Casa do Limoeiro"><circle class="pin" r="15"/><text y="1">1</text></g>
+          <g class="map-pin" data-place="casa-da-fonte" transform="translate(465 243)" tabindex="0" role="button" aria-label="Open Casa da Fonte"><circle class="pin" r="15"/><text y="1">2</text></g>
+          <g class="map-pin" data-place="casa-do-carmo" transform="translate(551 314)" tabindex="0" role="button" aria-label="Open Casa do Carmo"><circle class="pin" r="15"/><text y="1">3</text></g>
+          <g class="map-pin" data-place="casa-figo" transform="translate(218 286)" tabindex="0" role="button" aria-label="Open Casa Figo"><circle class="pin" r="15"/><text y="1">4</text></g>
+        </svg>
+        <div class="map-legend"><strong>Quiet streets</strong><br><span class="muted">Indicative only; not a noise measurement.</span><br><span class="cell-source">Sample locations · host listings checked 18 Sept 2026</span></div>
+      </div>
+      <div class="screen-actions">
+        <span class="small muted" id="shortlist-count">0 of 4 on your shortlist</span>
+        <button class="btn btn-secondary" type="button" data-go="shortlist">Open shortlist <span aria-hidden="true">→</span></button>
+      </div>
+      <footer class="prototype-footer">Prototype · sample data</footer>
+    </section>
+
+    <section class="screen" id="screen-shortlist" aria-labelledby="shortlist-title">
+      <div class="section-heading">
+        <div class="eyebrow">Your shortlist · drag to rearrange</div>
+        <h2 id="shortlist-title">Compare on what matters to you.</h2>
+        <p class="lede">Move the sliders to change what matters most. Your places will reorder as your priorities shift.</p>
+        <button class="text-link ranking-link" type="button" data-action="ranking-help">How Travellers Taste ranks places</button>
+      </div>
+      <div class="board-tools">
+        <div class="importance-tools" id="board-sliders"></div>
+        <button class="btn btn-secondary btn-small" type="button" data-action="share">↗ &nbsp;Share with partner</button>
+      </div>
+      <div class="prompt-inline" id="reason-prompt">
+        <strong>Quick one — why not this one?</strong>
+        <span class="small muted">Helps me learn. Skip any time.</span>
+        <div class="chips" id="reason-chips"></div>
+        <button class="text-link small" type="button" data-action="skip-reason">Skip</button>
+      </div>
+      <div class="board-scroll">
+        <p class="mobile-board-hint">Swipe the places sideways · your criteria stay pinned</p>
+        <div class="board" id="shortlist-board"></div>
+      </div>
+      <p class="partner-note">Your partner can vote privately on each place from the share link.</p>
+      <div class="screen-actions">
+        <button class="btn btn-secondary" type="button" data-go="results">← Back to places</button>
+        <button class="btn btn-primary" type="button" data-action="decide">See the final two <span aria-hidden="true">→</span></button>
+      </div>
+      <footer class="prototype-footer">Prototype · sample data</footer>
+    </section>
+
+    <section class="screen" id="screen-decide" aria-labelledby="decide-title">
+      <div id="decide-content"></div>
+      <footer class="prototype-footer">Prototype · sample data</footer>
+    </section>
+
+    <section class="screen" id="screen-return" aria-labelledby="return-title">
+      <div class="welcome-layout">
+        <div>
+          <div class="eyebrow">Six months later · October</div>
+          <h2 id="return-title">Welcome back, Sam.</h2>
+          <p class="lede">Last time we found a little more of what “your kind of place” means. Shall we bring that along?</p>
+          <div class="card memory-card">
+            <div class="memory-title"><span class="memory-mark" aria-hidden="true">♡</span><h3>A few things I remember</h3></div>
+            <div class="memory-summary">Last time you loved stone walls and owner-run places, and said no to modern design. Still true?</div>
+            <div class="memory-row">
+              <div><strong>Loves stone walls &amp; owner-run places</strong><span>From your Porto trip</span></div>
+              <div class="memory-actions"><button class="btn btn-secondary" type="button" data-action="memory-yes">Yes</button><button class="btn btn-secondary" type="button" data-action="memory-edit" data-item="stone">Edit</button></div>
+            </div>
+            <div class="memory-row">
+              <div><strong>Avoids modern design</strong><span>Learned when you removed a place</span></div>
+              <div class="memory-actions"><button class="btn btn-secondary" type="button" data-action="memory-yes">Yes</button><button class="btn btn-secondary" type="button" data-action="memory-edit" data-item="modern">Edit</button></div>
+            </div>
+          </div>
+          <div class="screen-actions">
+            <button class="btn btn-secondary" type="button" data-go="feel">Plan a new trip from scratch</button>
+          </div>
+        </div>
+        <aside class="trip-card">
+          <div class="eyebrow">A new little adventure</div>
+          <h3>Lisbon, October</h3>
+          <p>4 nights · dates and details are yours to change</p>
+          <button class="btn btn-primary" type="button" data-action="plan-lisbon">Plan Lisbon, October <span aria-hidden="true">→</span></button>
+        </aside>
+      </div>
+      <footer class="prototype-footer">Prototype · sample data</footer>
+    </section>
+  </main>
+
+  <nav class="screen-menu" aria-label="Prototype screen menu">
+    <span class="menu-label">Jump to</span>
+    <select id="screen-select" aria-label="Jump to any prototype screen">
+      <option value="feel">1 · How should it feel?</option>
+      <option value="profile">2 · Your words</option>
+      <option value="results">3 · Results</option>
+      <option value="shortlist">4 · Shortlist board</option>
+      <option value="decide">5 · The last two</option>
+      <option value="return">6 · Welcome back</option>
+    </select>
+  </nav>
+  <div class="modal-backdrop" id="modal-backdrop" role="presentation">
+    <section class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"></section>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // All content is local sample data. No listings or reviews are fetched.
+    const moodTiles = [
+      { label: "Old stone walls", image: "tile-stone.jpg" },
+      { label: "Plants & wood", image: "tile-plants.jpg" },
+      { label: "Minimal & white", image: "tile-minimal.jpg" },
+      { label: "Sea view", image: "tile-sea.jpg" },
+      { label: "Busy & central", image: "tile-busy.jpg" },
+      { label: "Family-run", image: "tile-family.jpg" },
+      { label: "Design hotel", image: "tile-design.jpg" },
+      { label: "Rustic farmhouse", image: "tile-farmhouse.jpg" }
+    ];
+    const criteria = [
+      { id: "quiet", label: "Quiet", signals: ["Side street, not a main road", "No bar directly below", "Reviews mention peaceful sleep"], importance: 78 },
+      { id: "cosy", label: "Cosy", signals: ["Warm lighting", "Wood and soft textiles", "Small place, under 10 rooms", "Owner-run"], importance: 72 },
+      { id: "character", label: "With character", signals: ["Original stone or tile", "Locally made details", "Not a matching-chain interior"], importance: 67 },
+      { id: "cares", label: "Someone cares", signals: ["Owner-run or family-run", "Personal welcome mentioned", "Thoughtful, useful touches"], importance: 83 }
+    ];
+    const places = [
+      {
+        id: "casa-do-limoeiro", name: "Casa do Limoeiro", area: "Cedofeita · leafy side streets", price: 126, previousPrice: 131,
+        photo: "limoeiro.jpg", photoText: "Stone courtyard · warm afternoon light",
+        scores: { quiet: 94, cosy: 89, character: 96, cares: 92 },
+        signals: "Original stone walls, a tucked-away lane, and a host who leaves a handwritten neighbourhood map.",
+        thinEvidence: [], peacefulSleepMentions: 2,
+        quotes: [
+          ["Slept with the windows open, total silence.", "Google review · Mar 2026"],
+          ["The owner left us a little note about the bakery next door. Lovely old house.", "Guest note · Feb 2026"]
+        ],
+        badges: [["Host listing marked open", "verified"], ["A few reviews mention noise", "uncertain"]],
+        couldnt: "I couldn't verify evening noise against an independent source."
+      },
+      {
+        id: "casa-da-fonte", name: "Casa da Fonte", area: "Sé · above a quiet square", price: 114, previousPrice: 126,
+        photo: "fonte.jpg", photoText: "Tiled doorway beside a little garden",
+        scores: { quiet: 76, cosy: 85, character: 88, cares: 96 },
+        signals: "A small, family-run guesthouse with hand-painted tiles, warm lamps and a personal welcome.",
+        thinEvidence: [], peacefulSleepMentions: 3,
+        quotes: [
+          ["It felt like staying with family, but with our own space.", "Guest note · Apr 2026"],
+          ["A lovely calm little place. The host remembered how we take our coffee.", "Google review · Jan 2026"]
+        ],
+        badges: [["Host listing marked open", "verified"], ["Photos may be outdated", "uncertain"]],
+        couldnt: "I couldn't confirm whether the garden is open to guests in May."
+      },
+      {
+        id: "casa-do-carmo", name: "Casa do Carmo", area: "Clérigos · near the old lanes", price: 108, previousPrice: 120,
+        photo: "carmo.jpg", photoText: "Soft linen and leafy corners",
+        scores: { quiet: 34, cosy: 92, character: 79, cares: 82 },
+        signals: "Soft linen, leafy corners and a thoughtful self-check-in in a restored townhouse.",
+        thinEvidence: ["quiet"], peacefulSleepMentions: 0,
+        quotes: [
+          ["The lamps and blankets made rainy evenings feel like a treat.", "Guest note · Mar 2026"],
+          ["A charming old building. Easy walk everywhere, and a good little welcome basket.", "Google review · Feb 2026"]
+        ],
+        badges: [["Host listing marked open", "verified"], ["Few reviews mention noise", "uncertain"]],
+        couldnt: "I couldn't confirm the soundproofing between rooms."
+      },
+      {
+        id: "casa-figo", name: "Casa Figo", area: "Bonfim · a lived-in local pocket", price: 119, previousPrice: 119,
+        photo: "figo.jpg", photoText: "Sunny kitchen · wooden table",
+        scores: { quiet: 91, cosy: 77, character: 93, cares: 78 },
+        signals: "A converted home with original floors, a quiet residential address and lots of local detail.",
+        thinEvidence: [], peacefulSleepMentions: 0,
+        quotes: [
+          ["Felt like a real neighbourhood, not a visitor bubble.", "Guest note · Apr 2026"],
+          ["We found our favourite coffee spot thanks to the host's little guide.", "Google review · Mar 2026"]
+        ],
+        badges: [["Host listing marked open", "verified"], ["Reply time not independently checked", "uncertain"]],
+        couldnt: "I couldn't independently confirm the host's response time."
+      }
+    ];
+    const state = {
+      screen: "feel",
+      mood: {},
+      criteria: criteria.map(item => ({ ...item, signals: [...item.signals], confirmedSignals: new Set(item.signals) })),
+      trip: { dates: "May 14–18", nights: 4, guests: 2, budget: 120 },
+      shortlist: ["casa-do-limoeiro", "casa-da-fonte", "casa-do-carmo"],
+      votes: { "casa-do-limoeiro": "up", "casa-da-fonte": "down", "casa-do-carmo": "up" },
+      dismissedPlaces: new Set(),
+      openBoardSources: new Set(),
+      pendingRemoval: null,
+      reasonBy: {},
+      toastTimer: null,
+      undoAction: null,
+      sortFrame: null
+    };
+    const reasons = ["Too modern", "Too far", "Price", "Just a feeling"];
+    const $ = (selector, root = document) => root.querySelector(selector);
+    const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+    const getPlace = id => places.find(place => place.id === id);
+
+    function showScreen(name) {
+      const next = document.getElementById(`screen-${name}`);
+      if (!next) return;
+      $$(".screen").forEach(section => section.classList.toggle("active", section === next));
+      state.screen = name;
+      $("#screen-select").value = name;
+      if (name === "profile") renderProfile();
+      if (name === "results") renderResults();
+      if (name === "shortlist") renderShortlist();
+      if (name === "decide") renderDecide();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function renderMoodTiles() {
+      $("#mood-grid").innerHTML = moodTiles.map(tile => {
+        const choice = state.mood[tile.label];
+        const label = choice === "yes" ? "Yes, this" : choice === "no" ? "Not for me" : "";
+        return `<button class="mood-tile ${choice || ""}" type="button" data-mood="${tile.label}" aria-pressed="${choice === "yes"}">
+          <img src="images/${tile.image}" alt="" loading="lazy">${label ? `<em>${label}</em>` : ""}<span>${tile.label}</span>
+        </button>`;
+      }).join("");
+    }
+
+    function renderTripBasics() {
+      $("#trip-dates").textContent = state.trip.dates;
+      $("#trip-nights").textContent = `${state.trip.nights} ${state.trip.nights === 1 ? "night" : "nights"}`;
+      $("#trip-guests").textContent = `${state.trip.guests} ${state.trip.guests === 1 ? "guest" : "guests"}`;
+      $("#trip-budget").textContent = `About €${state.trip.budget}`;
+    }
+
+    function renderProfile() {
+      $("#profile-list").innerHTML = state.criteria.map((item, index) => `
+        <article class="card profile-card">
+          <div class="profile-top">
+            <div><span class="word-label">${escapeHTML(item.label.toLowerCase())}</span><span class="word-hint">What I’ll look for</span></div>
+            <div class="chips" data-criterion="${item.id}">
+              ${item.signals.map((signal, signalIndex) => `<span class="signal-chip"><button type="button" class="chip-confirm ${item.confirmedSignals.has(signal) ? "active" : ""}" data-action="toggle-signal" data-criterion="${item.id}" data-index="${signalIndex}" aria-label="${item.confirmedSignals.has(signal) ? "Unconfirm" : "Confirm"} ${escapeHTML(signal)}" aria-pressed="${item.confirmedSignals.has(signal)}">✓</button>${escapeHTML(signal)}<button type="button" class="chip-remove" data-action="remove-signal" data-criterion="${item.id}" data-index="${signalIndex}" aria-label="Remove ${escapeHTML(signal)}">×</button></span>`).join("")}
+              <button type="button" class="add-chip" data-action="add-signal" data-criterion="${item.id}">＋ Add your own</button>
+            </div>
+          </div>
+          <div class="importance">
+            <label for="importance-${item.id}">How important is this?</label>
+            <input id="importance-${item.id}" type="range" min="0" max="100" value="${item.importance}" data-importance="${item.id}" aria-label="${item.label} importance">
+            <span class="importance-value" id="importance-value-${item.id}">${importanceLabel(item.importance)}</span>
+          </div>
+        </article>`).join("");
+    }
+
+    function importanceLabel(value) {
+      if (value >= 76) return "Must have";
+      if (value >= 46) return "Matters a lot";
+      if (value >= 20) return "Nice to have";
+      return "Not essential";
+    }
+
+    function renderResults() {
+      const grid = $("#results-grid");
+      const availablePlaces = places.filter(place => !state.dismissedPlaces.has(place.id));
+      grid.innerHTML = availablePlaces.length ? availablePlaces.map((place, index) => {
+        const added = state.shortlist.includes(place.id);
+        const shownIndex = index + 1;
+        return `<article class="card stay-card" id="result-${place.id}">
+          <div class="stay-photo"><img src="images/${place.photo}" alt="${place.photoText}" loading="lazy"><span class="photo-label">${place.photoText}</span><span class="price-tag">€${place.price} <span class="muted">/ night</span></span></div>
+          <div class="stay-body">
+            <div class="stay-title-row"><div><h3>${place.name}</h3><div class="location">${place.area}</div></div><span class="pill neutral">${shownIndex} of ${places.length - state.dismissedPlaces.size}</span></div>
+            <div class="fit-caption">How it feels on your terms</div>
+            <div class="fit-bars">${criterionBars(place)}</div>
+            <details class="why"><summary>Why this matches you</summary>
+              <div class="quote-list">${place.quotes.map(([quote, source]) => `<blockquote>“${quote}”<cite>— ${source}</cite></blockquote>`).join("")}</div>
+              <p class="match-note"><strong>Signals I found:</strong> ${place.signals}</p>
+              <p class="evidence-source">Host listing, price and availability checked 18 Sept 2026 · guest reviews dated Jan–Apr 2026.</p>
+            </details>
+            <div class="trust-row">${place.badges.map(([label, type]) => `<span class="pill ${type}">${label}</span>`).join("")}</div>
+            <p class="couldnt-check"><strong>What I couldn’t check:</strong> ${place.couldnt}</p>
+            <div class="stay-actions"><span class="small muted">${added ? "On your shortlist" : ""}</span><button class="btn btn-secondary btn-small" type="button" data-action="toggle-shortlist" data-place="${place.id}">${added ? "✓ Shortlisted" : "＋ Add to shortlist"}</button><button class="text-link small" type="button" data-action="dismiss-place" data-place="${place.id}">Not for me</button></div>
+          </div>
+        </article>`;
+      }).join("") : `<div class="result-empty">You’ve removed every place from these results. <button class="text-link" type="button" data-action="restore-dismissed">Undo the last removal</button></div>`;
+      $("#results-title").textContent = `${places.length - state.dismissedPlaces.size} places that fit how you described it`;
+      $$(".map-pin").forEach(pin => { pin.style.display = state.dismissedPlaces.has(pin.dataset.place) ? "none" : ""; });
+      updateShortlistCount();
+      const isMap = $("#map-panel").classList.contains("visible");
+      grid.classList.toggle("hidden", isMap);
+      $$(".view-switch button").forEach(button => button.classList.toggle("selected", button.dataset.view === (isMap ? "map" : "list")));
+    }
+
+    function criterionBars(place) {
+      return state.criteria.map(item => {
+        const assessment = fitAssessment(place, item.id);
+        return `<div class="fit-item">
+            <div class="fit-label"><span>${escapeHTML(item.label)}</span></div>
+            <span class="fit-status ${assessment.thin ? "uncertain" : ""}">${assessment.label}</span>
+          <div class="fit-track" aria-label="${item.label}: ${assessment.label}"><div class="fit-fill ${assessment.thin ? "thin" : ""}" style="width:${assessment.barWidth}%"></div></div>
+        </div>`;
+      }).join("");
+    }
+
+    function fitAssessment(place, criterionId) {
+      const score = place.scores[criterionId] ?? 0;
+      const thin = place.thinEvidence?.includes(criterionId) ?? false;
+      const label = thin || score < 50 ? "Not sure yet" : score >= 88 ? "Strong match" : "Good match";
+      return { label, thin: label === "Not sure yet", barWidth: thin ? 32 : score };
+    }
+
+    function updateShortlistCount() {
+      $("#shortlist-count").textContent = `${state.shortlist.length} of 4 on your shortlist`;
+    }
+
+    function renderShortlist(renderSliders = true) {
+      const sliderRoot = $("#board-sliders");
+      if (renderSliders) sliderRoot.innerHTML = state.criteria.map(item => `<div class="importance-mini"><label for="board-${item.id}"><span>${escapeHTML(item.label)}</span><span>${item.importance}</span></label><input id="board-${item.id}" type="range" min="0" max="100" value="${item.importance}" data-importance="${item.id}" aria-label="${item.label} importance"></div>`).join("");
+      const board = $("#shortlist-board");
+      const selected = state.shortlist.map(getPlace).filter(Boolean);
+      if (!selected.length) {
+        board.style.display = "block";
+        board.innerHTML = `<div class="empty-board"><h3>Your shortlist is ready for a place.</h3><p class="muted">Add one or two you like from the results. I’ll keep the comparison focused.</p><button class="btn btn-secondary" type="button" data-go="results">Browse places</button></div>`;
+        return;
+      }
+      board.style.display = "grid";
+      const mobileLayout = window.matchMedia("(max-width: 760px)").matches;
+      const labelWidth = mobileLayout ? 112 : 152;
+      const placeWidth = mobileLayout ? 220 : 190;
+      const placeTrack = mobileLayout ? `${placeWidth}px` : `minmax(${placeWidth}px, 1fr)`;
+      board.style.gridTemplateColumns = `${labelWidth}px repeat(${selected.length}, ${placeTrack})`;
+      const cells = [];
+      cells.push(`<div class="board-cell board-head row-label">Your shortlist<br><span class="drag-hint">Drag a place to reorder</span></div>`);
+      selected.forEach(place => cells.push(`<div class="board-cell board-head" draggable="true" data-board-place="${place.id}">
+        <div class="board-thumb"><img src="images/${place.photo}" alt="" loading="lazy"></div><div class="board-name">${place.name}</div><div class="board-area">${place.area}</div>
+        <div class="board-head-tools"><span class="drag-hint">↕ Drag</span><button class="remove-place" type="button" data-action="remove-place" data-place="${place.id}" aria-label="Remove ${place.name}">×</button></div>
+        <span class="cell-source">Host listing · checked 18 Sept 2026 · guest reviews dated Jan–Apr 2026</span>
+        <p class="couldnt-check"><strong>What I couldn’t check:</strong> ${place.couldnt}</p></div>`));
+      const rows = [...state.criteria.map(item => ({ label: item.label, id: item.id })), { label: "Price / night", id: "price" }, { label: "Location", id: "location" }];
+      rows.forEach(row => {
+        cells.push(`<div class="board-cell row-label">${escapeHTML(row.label)}</div>`);
+        selected.forEach(place => {
+          let value;
+          if (row.id === "price") value = `<div><span class="price-cell">€${place.price} / night</span><span class="cell-source">Host listing · checked 18 Sept 2026</span></div>`;
+          else if (row.id === "location") value = `<div><span>${escapeHTML(place.area.split(" · ")[0])}</span><span class="cell-source">Host listing · checked 18 Sept 2026</span></div>`;
+          else {
+            const assessment = fitAssessment(place, row.id);
+            const source = row.id === "quiet" ? "Guest reviews · Jan–Apr 2026" : row.id === "cares" ? "Host listing checked 18 Sept 2026 · guest reviews Jan–Apr 2026" : "Host listing · checked 18 Sept 2026";
+            value = `<div class="cell-score"><span class="fit-status ${assessment.thin ? "uncertain" : ""}">${assessment.label}</span><div class="fit-track" aria-label="${escapeHTML(row.label)}: ${assessment.label}"><div class="fit-fill ${assessment.thin ? "thin" : ""}" style="width:${assessment.barWidth}%"></div></div><span class="cell-source">${source}</span></div>`;
+          }
+          const sourceKey = `${place.id}:${row.id}`;
+          const sourceOpen = state.openBoardSources.has(sourceKey);
+          cells.push(`<div class="board-cell${sourceOpen ? " source-open" : ""}" data-source-cell data-source-key="${sourceKey}" tabindex="0" role="group" aria-expanded="${sourceOpen}" aria-label="${escapeHTML(row.label)} for ${place.name}; focus or hover to see the source">${value}</div>`);
+        });
+      });
+      board.innerHTML = cells.join("");
+      $$(".board-cell.board-head[draggable=true]", board).forEach(attachDragEvents);
+      $("#reason-prompt").classList.toggle("visible", Boolean(state.pendingRemoval));
+    }
+
+    function sortShortlistWithAnimation() {
+      const board = $("#shortlist-board");
+      const oldPositions = new Map($$(".board-head[data-board-place]", board).map(card => [card.dataset.boardPlace, card.getBoundingClientRect().left]));
+      state.shortlist.sort((a, b) => weightedScore(getPlace(b)) - weightedScore(getPlace(a)));
+      renderShortlist(false);
+      $$(".board-head[data-board-place]", board).forEach(card => {
+        const oldLeft = oldPositions.get(card.dataset.boardPlace);
+        if (oldLeft === undefined) return;
+        const delta = oldLeft - card.getBoundingClientRect().left;
+        if (delta) card.animate(
+          [{ transform: `translateX(${delta}px)` }, { transform: "translateX(0)" }],
+          { duration: 260, easing: "cubic-bezier(.2,.7,.2,1)" }
+        );
+      });
+    }
+
+    function weightedScore(place) {
+      const total = state.criteria.reduce((sum, item) => sum + item.importance, 0) || 1;
+      return state.criteria.reduce((sum, item) => sum + place.scores[item.id] * item.importance, 0) / total;
+    }
+
+    function attachDragEvents(card) {
+      card.addEventListener("dragstart", event => {
+        event.dataTransfer.setData("text/plain", card.dataset.boardPlace);
+        event.dataTransfer.effectAllowed = "move";
+        card.classList.add("dragging");
+      });
+      card.addEventListener("dragend", () => card.classList.remove("dragging"));
+      card.addEventListener("dragover", event => { event.preventDefault(); card.classList.add("drag-over"); });
+      card.addEventListener("dragleave", () => card.classList.remove("drag-over"));
+      card.addEventListener("drop", event => {
+        event.preventDefault();
+        card.classList.remove("drag-over");
+        const fromId = event.dataTransfer.getData("text/plain");
+        const toId = card.dataset.boardPlace;
+        if (!fromId || fromId === toId) return;
+        const fromIndex = state.shortlist.indexOf(fromId);
+        const toIndex = state.shortlist.indexOf(toId);
+        if (fromIndex < 0 || toIndex < 0) return;
+        state.shortlist.splice(fromIndex, 1);
+        state.shortlist.splice(toIndex, 0, fromId);
+        renderShortlist();
+      });
+    }
+
+    function renderReasonChips() {
+      $("#reason-chips").innerHTML = reasons.map(reason => `<button class="reason-chip" type="button" data-action="choose-reason" data-reason="${reason}">${reason}</button>`).join("");
+    }
+
+    function renderDecide() {
+      const root = $("#decide-content");
+      const selected = state.shortlist.map(getPlace).filter(Boolean);
+      if (selected.length !== 2) {
+        root.innerHTML = `<div class="eyebrow">Your shortlist</div><h2 id="decide-title">Let’s narrow it to two.</h2><div class="not-two"><p>I’ll show only the real differences once there are two places left.</p><p class="muted">You have ${selected.length} ${selected.length === 1 ? "place" : "places"} shortlisted.</p><button class="btn btn-secondary" type="button" data-go="shortlist">Back to your comparison</button></div>`;
+        return;
+      }
+      const [first, second] = selected;
+      const watchPlace = selected.find(place => place.id === "casa-do-carmo") || second;
+      const priceDrop = watchPlace.previousPrice - watchPlace.price;
+      const watchCopy = priceDrop > 0
+        ? `${watchPlace.name} dropped €${priceDrop} since 17 Sept 2026.`
+        : `${watchPlace.name} is the same price as on 17 Sept 2026.`;
+      const dimensions = state.criteria.map(item => ({
+        id: item.id,
+        label: item.id === "quiet" ? "Peaceful sleep" : item.label,
+        firstScore: fitAssessment(first, item.id).barWidth,
+        secondScore: fitAssessment(second, item.id).barWidth,
+        importance: item.importance
+      }));
+      const optionsFor = (place, other) => {
+        const options = dimensions.filter(dimension => dimension.firstScore !== dimension.secondScore).map(dimension => {
+          const score = place === first ? dimension.firstScore : dimension.secondScore;
+          const otherScore = place === first ? dimension.secondScore : dimension.firstScore;
+          if (score <= otherScore) return null;
+          return {
+            key: dimension.id,
+            score: (score - otherScore) * dimension.importance,
+            eyebrow: dimension.label,
+            title: place.name,
+            description: dimension.id === "quiet"
+              ? `Ranks ahead of ${other.name} on quiet, based on guest-review signals.`
+              : `Ranks ahead of ${other.name} for ${dimension.label.toLowerCase()}, based on the signals you chose.`,
+            source: dimension.id === "quiet"
+              ? "Source: guest reviews · Jan–Apr 2026."
+              : dimension.id === "cares"
+                ? "Source: host listing checked 18 Sept 2026 · guest reviews dated Jan–Apr 2026."
+                : "Source: host listing checked 18 Sept 2026.",
+            couldnt: dimension.id === "quiet"
+              ? "Actual room noise on your dates; no independent noise measurements."
+              : "How the details will feel in person during your stay."
+          };
+        }).filter(Boolean);
+        if (place.price !== other.price && place.price < other.price) {
+          options.push({
+            key: "price",
+            score: Math.abs(place.price - other.price) / Math.max(state.trip.budget, 1) * 10000,
+            eyebrow: "Nightly price",
+            title: place.name,
+            description: `€${other.price - place.price} less per night — €${(other.price - place.price) * state.trip.nights} over your ${state.trip.nights} nights, based on listed nightly rates.`,
+            source: "Source: host listings · prices checked 18 Sept 2026.",
+            couldnt: "Taxes, cleaning fees or final total on a booking page."
+          });
+        }
+        return options;
+      };
+      const firstOptions = optionsFor(first, second);
+      const secondOptions = optionsFor(second, first);
+      let wins = null;
+      for (const firstOption of firstOptions) {
+        for (const secondOption of secondOptions) {
+          if (firstOption.key === secondOption.key) continue;
+          const total = firstOption.score + secondOption.score;
+          if (!wins || total > wins.total) wins = { firstOption, secondOption, total };
+        }
+      }
+      if (!wins) {
+        const cheapest = first.price <= second.price ? first : second;
+        const other = cheapest === first ? second : first;
+        const difference = other.price - cheapest.price;
+        wins = {
+          firstOption: cheapest === first ? {
+            key: "price", eyebrow: "Nightly price", title: first.name,
+            description: `€${difference} less per night, based on listed nightly rates.`,
+            source: "Source: host listings · prices checked 18 Sept 2026.",
+            couldnt: "Taxes, cleaning fees or final total on a booking page."
+          } : {
+            key: "comparison", eyebrow: "Your shortlist", title: first.name,
+            description: "This is the first place in your shortlist.",
+            source: "Source: your shortlist · updated 18 Sept 2026.",
+            couldnt: "No distinct preference advantage could be confirmed."
+          },
+          secondOption: cheapest === second ? {
+            key: "price", eyebrow: "Nightly price", title: second.name,
+            description: `€${difference} less per night, based on listed nightly rates.`,
+            source: "Source: host listings · prices checked 18 Sept 2026.",
+            couldnt: "Taxes, cleaning fees or final total on a booking page."
+          } : {
+            key: "comparison", eyebrow: "Your shortlist", title: second.name,
+            description: "This is the second place in your shortlist.",
+            source: "Source: your shortlist · updated 18 Sept 2026.",
+            couldnt: "No distinct preference advantage could be confirmed."
+          }
+        };
+      }
+      const differences = [wins.firstOption, wins.secondOption].map(option =>
+        `<article class="card difference-card"><span class="eyebrow">${option.eyebrow}</span><h3>${option.title}</h3><p>${option.description}</p><span class="evidence-source">${option.source}</span><p class="couldnt-check"><strong>What I couldn’t check:</strong> ${option.couldnt}</p></article>`
+      );
+      root.innerHTML = `<div class="last-two-label"><span>✳</span> Two different kinds of right</div>
+        <h2 id="decide-title">The last two.</h2>
+        <p class="lede">Here’s the part that might help you decide. Everything else is much the same.</p>
+        <button class="text-link ranking-link" type="button" data-action="ranking-help">How Travellers Taste ranks places</button>
+        <div class="difference-grid">${differences.join("")}</div>
+        <details class="card same-details"><summary>Same on both</summary><div class="same-content"><span class="pill neutral">Owner-run feel</span><span class="pill neutral">Original Porto character</span><span class="pill neutral">Walkable old town</span><span class="pill neutral">Host listings open</span></div><span class="evidence-source">Shared details: host listings checked 18 Sept 2026 and guest reviews dated Jan–Apr 2026.</span></details>
+        <div class="price-watch"><span class="watch-icon" aria-hidden="true">⌁</span><div><strong>${watchCopy}</strong><p>Source: host listing price history · 17–18 Sept 2026. I’ll let you know if it changes again.</p></div></div>
+        <div class="direct-note"><strong>A note about booking:</strong> Travellers Taste doesn’t take bookings or commissions — you book directly with the host.</div>
+        <div class="decide-actions"><button class="btn btn-primary" type="button" data-action="book">Book on host’s site <span aria-hidden="true">↗</span></button><button class="btn btn-secondary" type="button" data-go="shortlist">Back to compare</button><button class="btn btn-quiet" type="button" data-go="return">Maybe another trip later</button></div>`;
+    }
+
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
+    }
+
+    function showToast(message) {
+      const toast = $("#toast");
+      state.undoAction = null;
+      toast.replaceChildren(document.createTextNode(message));
+      toast.classList.add("visible");
+      clearTimeout(state.toastTimer);
+      state.toastTimer = setTimeout(() => toast.classList.remove("visible"), 3100);
+    }
+
+    function showUndoToast(message, undoAction) {
+      const toast = $("#toast");
+      const text = document.createElement("span");
+      text.textContent = message;
+      const undo = document.createElement("button");
+      undo.className = "undo-button";
+      undo.type = "button";
+      undo.dataset.action = "undo-removal";
+      undo.textContent = "Undo";
+      toast.replaceChildren(text, undo);
+      state.undoAction = undoAction;
+      toast.classList.add("visible");
+      clearTimeout(state.toastTimer);
+      state.toastTimer = setTimeout(() => {
+        toast.classList.remove("visible");
+        state.undoAction = null;
+      }, 5000);
+    }
+
+    function openShareSheet() {
+      const modal = $("#modal");
+      const selected = state.shortlist.map(getPlace).filter(Boolean);
+      modal.innerHTML = `<div class="modal-head"><div><div class="eyebrow">Make the choice together</div><h3 id="modal-title">Share with your partner</h3></div><button class="modal-close" type="button" data-action="close-modal" aria-label="Close">×</button></div>
+        <p class="small muted">They can browse your shortlist and vote privately. This is a mock share sheet; nothing is sent.</p>
+        <div class="share-link"><input aria-label="Mock share link" readonly value="travellerstaste.local/sam/porto-may"><button class="btn btn-secondary btn-small" type="button" data-action="copy-link">Copy link</button></div>
+        <div class="rule"></div><div class="small muted">Alex’s votes · received 2 hours ago</div>
+        ${selected.map(place => `<div class="vote-place"><strong>${place.name}</strong><span class="partner-vote" aria-label="Alex voted ${state.votes[place.id] === "up" ? "yes" : "no"}"> ${state.votes[place.id] === "up" ? "👍 Yes" : "👎 No"}</span></div>`).join("")}
+        <div style="display:flex;justify-content:flex-end;margin-top:17px"><button class="btn btn-secondary" type="button" data-action="close-modal">Done</button></div>`;
+      $("#modal-backdrop").classList.add("visible");
+    }
+
+    function openRankingHelp() {
+      $("#modal").innerHTML = `<div class="modal-head"><div><div class="eyebrow">A transparent shortlist</div><h3 id="modal-title">How Travellers Taste ranks places</h3></div><button class="modal-close" type="button" data-action="close-modal" aria-label="Close">×</button></div>
+        <p>I compare each place with the signals you chose for quiet, cosy, character and care. Each bar is about one of your preferences—not an overall score.</p>
+        <p><strong>Strong match</strong> means several signals support it. <strong>Good match</strong> means some clear signs are there. <strong>Not sure yet</strong> means evidence is thin or mixed; amber marks that uncertainty.</p>
+        <p>I use your importance sliders to order the shortlist. You can change the signals, priorities or order yourself. Sources and dates sit beside the evidence, and I’ll say plainly what I couldn’t verify.</p>
+        <div style="display:flex;justify-content:flex-end;margin-top:20px"><button class="btn btn-secondary" type="button" data-action="close-modal">Got it</button></div>`;
+      $("#modal-backdrop").classList.add("visible");
+    }
+
+    function openBasicsSheet() {
+      $("#modal").innerHTML = `<div class="modal-head"><div><div class="eyebrow">The practical bits</div><h3 id="modal-title">Your trip details</h3></div><button class="modal-close" type="button" data-action="close-modal" aria-label="Close">×</button></div>
+        <form id="trip-form">
+          <label class="small" for="trip-dates-input">Dates</label>
+          <input id="trip-dates-input" name="dates" required maxlength="24" value="${escapeHTML(state.trip.dates)}" style="display:block;width:100%;padding:10px;margin:5px 0 13px;border:1px solid var(--line);border-radius:6px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <label class="small">Nights<input name="nights" type="number" min="1" max="30" required value="${state.trip.nights}" style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid var(--line);border-radius:6px"></label>
+            <label class="small">Guests<input name="guests" type="number" min="1" max="12" required value="${state.trip.guests}" style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid var(--line);border-radius:6px"></label>
+          </div>
+          <label class="small" style="display:block;margin-top:13px">Budget per night (€)<input name="budget" type="number" min="30" max="1000" required value="${state.trip.budget}" style="display:block;width:100%;padding:10px;margin-top:5px;border:1px solid var(--line);border-radius:6px"></label>
+          <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:19px"><button class="btn btn-secondary" type="button" data-action="close-modal">Cancel</button><button class="btn btn-secondary" type="submit">Save details</button></div>
+        </form>`;
+      $("#modal-backdrop").classList.add("visible");
+    }
+
+    function closeModal() { $("#modal-backdrop").classList.remove("visible"); }
+
+    // Single delegated listener keeps controls functional after each render.
+    document.addEventListener("click", event => {
+      const target = event.target.closest("button, [data-go]");
+      if (!target) return;
+      if (target.dataset.go) { showScreen(target.dataset.go); return; }
+      const action = target.dataset.action;
+      if (action === "toggle-signal") {
+        const item = state.criteria.find(entry => entry.id === target.dataset.criterion);
+        const signal = item?.signals[Number(target.dataset.index)];
+        if (item && signal) {
+          if (item.confirmedSignals.has(signal)) item.confirmedSignals.delete(signal);
+          else item.confirmedSignals.add(signal);
+          renderProfile();
+        }
+      }
+      if (action === "remove-signal") {
+        const item = state.criteria.find(entry => entry.id === target.dataset.criterion);
+        if (item) {
+          const index = Number(target.dataset.index);
+          const [removed] = item.signals.splice(index, 1);
+          const confirmed = item.confirmedSignals.has(removed);
+          item.confirmedSignals.delete(removed);
+          renderProfile();
+          showUndoToast(`Removed “${removed}” from ${item.label.toLowerCase()}.`, () => {
+            item.signals.splice(index, 0, removed);
+            if (confirmed) item.confirmedSignals.add(removed);
+            renderProfile();
+          });
+          return;
+        }
+      }
+      if (action === "add-signal") {
+        const item = state.criteria.find(entry => entry.id === target.dataset.criterion);
+        const signal = window.prompt(`What should I look for when you say “${item?.label.toLowerCase()}”?`);
+        if (signal?.trim() && item) {
+          item.signals.push(signal.trim());
+          item.confirmedSignals.add(signal.trim());
+          renderProfile();
+        }
+      }
+      if (action === "toggle-shortlist") {
+        const id = target.dataset.place;
+        if (state.shortlist.includes(id)) {
+          const index = state.shortlist.indexOf(id);
+          state.shortlist = state.shortlist.filter(placeId => placeId !== id);
+          renderResults();
+          showUndoToast(`${getPlace(id).name} removed from your shortlist.`, () => {
+            state.shortlist.splice(index, 0, id);
+            renderResults();
+            renderShortlist();
+          });
+          return;
+        } else if (state.shortlist.length < 4) state.shortlist.push(id);
+        else showToast("Your shortlist is full. Remove a place before adding another.");
+        renderResults();
+      }
+      if (action === "dismiss-place") {
+        const id = target.dataset.place;
+        const place = getPlace(id);
+        const wasShortlisted = state.shortlist.includes(id);
+        const shortlistIndex = state.shortlist.indexOf(id);
+        state.dismissedPlaces.add(id);
+        state.shortlist = state.shortlist.filter(placeId => placeId !== id);
+        renderResults();
+        renderShortlist();
+        showUndoToast(`${place.name} removed from your suggestions.`, () => {
+          state.dismissedPlaces.delete(id);
+          if (wasShortlisted) state.shortlist.splice(shortlistIndex, 0, id);
+          renderResults();
+          renderShortlist();
+        });
+      }
+      if (action === "restore-dismissed") {
+        const last = [...state.dismissedPlaces].pop();
+        if (last) {
+          state.dismissedPlaces.delete(last);
+          renderResults();
+          showToast(`${getPlace(last).name} restored to your suggestions.`);
+        }
+      }
+      if (action === "remove-place") {
+        const id = target.dataset.place;
+        const index = state.shortlist.indexOf(id);
+        state.pendingRemoval = id;
+        state.shortlist = state.shortlist.filter(placeId => placeId !== id);
+        renderShortlist();
+        renderReasonChips();
+        showUndoToast(`${getPlace(id).name} removed from your shortlist.`, () => {
+          state.shortlist.splice(index, 0, id);
+          state.pendingRemoval = null;
+          renderShortlist();
+        });
+      }
+      if (action === "choose-reason") {
+        const reason = target.dataset.reason;
+        state.reasonBy[state.pendingRemoval] = reason;
+        $("#reason-prompt").classList.remove("visible");
+        state.pendingRemoval = null;
+        const learnedPreference = $$(".memory-row", $("#screen-return"))[1]?.querySelector("strong");
+        if (learnedPreference) learnedPreference.textContent = `Avoids: ${reason.toLowerCase()}`;
+        showToast(`Got it — I’ll treat “${reason.toLowerCase()}” as a no next time.`);
+      }
+      if (action === "skip-reason") { state.pendingRemoval = null; $("#reason-prompt").classList.remove("visible"); }
+      if (action === "share") openShareSheet();
+      if (action === "ranking-help") openRankingHelp();
+      if (action === "close-modal") closeModal();
+      if (action === "undo-removal") {
+        const undo = state.undoAction;
+        state.undoAction = null;
+        $("#toast").classList.remove("visible");
+        clearTimeout(state.toastTimer);
+        undo?.();
+      }
+      if (action === "copy-link") {
+        const link = $("#modal input[readonly]");
+        link.select();
+        try { document.execCommand("copy"); showToast("Mock share link copied."); } catch (error) { showToast("Select the link to copy it."); }
+      }
+      if (action === "decide") showScreen("decide");
+      if (action === "book") showToast("This is a prototype — no booking or host website is connected.");
+      if (action === "edit-basics") openBasicsSheet();
+      if (action === "memory-yes") showToast("I’ll keep that in mind for your next trip.");
+      if (action === "memory-edit") {
+        const row = target.closest(".memory-row");
+        const value = window.prompt("Edit this remembered preference", row?.querySelector("strong")?.textContent || "");
+        if (value?.trim() && row) {
+          row.querySelector("strong").textContent = value.trim();
+          showToast("I’ve updated that remembered preference.");
+        }
+      }
+      if (action === "plan-lisbon") {
+        $("#feeling-input").value = "A quiet, cosy place with character and a host who cares — like someone actually cares about it, not a plain apartment.";
+        showToast("I brought your Porto preferences along for Lisbon.");
+        showScreen("feel");
+      }
+    });
+
+    document.addEventListener("submit", event => {
+      if (event.target.id !== "trip-form") return;
+      event.preventDefault();
+      const form = new FormData(event.target);
+      state.trip = {
+        dates: String(form.get("dates")).trim(),
+        nights: Number(form.get("nights")),
+        guests: Number(form.get("guests")),
+        budget: Number(form.get("budget"))
+      };
+      renderTripBasics();
+      closeModal();
+      showToast("Your trip details are updated.");
+    });
+
+    document.addEventListener("click", event => {
+      const moodButton = event.target.closest("[data-mood]");
+      if (!moodButton) return;
+      const key = moodButton.dataset.mood;
+      const previous = state.mood[key];
+      state.mood[key] = previous === undefined ? "yes" : previous === "yes" ? "no" : undefined;
+      if (state.mood[key] === undefined) {
+        delete state.mood[key];
+        showUndoToast(`Removed “${key}” from your mood choices.`, () => {
+          state.mood[key] = previous;
+          renderMoodTiles();
+        });
+      }
+      renderMoodTiles();
+      renderTripBasics();
+    });
+
+    document.addEventListener("click", event => {
+      const viewButton = event.target.closest("[data-view]");
+      if (!viewButton) return;
+      const mapMode = viewButton.dataset.view === "map";
+      $("#map-panel").classList.toggle("visible", mapMode);
+      $("#results-grid").classList.toggle("hidden", mapMode);
+      $$(".view-switch button").forEach(button => button.classList.toggle("selected", button === viewButton));
+    });
+
+    document.addEventListener("input", event => {
+      const slider = event.target.closest("[data-importance]");
+      if (!slider) return;
+      const item = state.criteria.find(entry => entry.id === slider.dataset.importance);
+      if (!item) return;
+      item.importance = Number(slider.value);
+      const profileValue = $(`#importance-value-${item.id}`);
+      if (profileValue) profileValue.textContent = importanceLabel(item.importance);
+      const miniLabel = slider.closest(".importance-mini")?.querySelector("label span:last-child");
+      if (miniLabel) miniLabel.textContent = item.importance;
+      if (state.screen === "shortlist") {
+        cancelAnimationFrame(state.sortFrame);
+        state.sortFrame = requestAnimationFrame(sortShortlistWithAnimation);
+      }
+    });
+
+    $("#screen-select").addEventListener("change", event => showScreen(event.target.value));
+    $("#modal-backdrop").addEventListener("click", event => { if (event.target === $("#modal-backdrop")) closeModal(); });
+    $("#shortlist-board").addEventListener("click", event => {
+      const cell = event.target.closest(".board-cell[data-source-cell]");
+      if (!cell) return;
+      const key = cell.dataset.sourceKey;
+      const expanded = !state.openBoardSources.has(key);
+      if (expanded) state.openBoardSources.add(key);
+      else state.openBoardSources.delete(key);
+      cell.classList.toggle("source-open", expanded);
+      cell.setAttribute("aria-expanded", String(expanded));
+    });
+    $("#shortlist-board").addEventListener("click", event => {
+      const cell = event.target.closest(".board-cell");
+      if (!cell || event.target.closest("button")) return;
+      if (cell.classList.contains("board-head")) cell.classList.toggle("source-open");
+    });
+    $("#shortlist-board").addEventListener("keydown", event => {
+      const cell = event.target.closest(".board-cell[data-source-cell]");
+      if (!cell || event.target !== cell || !["Enter", " "].includes(event.key)) return;
+      event.preventDefault();
+      const key = cell.dataset.sourceKey;
+      const expanded = !state.openBoardSources.has(key);
+      if (expanded) state.openBoardSources.add(key);
+      else state.openBoardSources.delete(key);
+      cell.classList.toggle("source-open", expanded);
+      cell.setAttribute("aria-expanded", String(expanded));
+    });
+    $("#mood-grid").addEventListener("keydown", event => {
+      if (event.key === "Escape") closeModal();
+    });
+    document.addEventListener("keydown", event => { if (event.key === "Escape") closeModal(); });
+
+    // Open an illustrative result from its map pin.
+    $("#map-panel").addEventListener("click", event => {
+      const pin = event.target.closest("[data-place]");
+      if (!pin) return;
+      showScreen("results");
+      $("#map-panel").classList.remove("visible");
+      $("#results-grid").classList.remove("hidden");
+      const card = $(`#result-${pin.dataset.place}`);
+      if (card) {
+        card.scrollIntoView({ behavior: "smooth", block: "center" });
+        card.style.boxShadow = "0 0 0 3px rgba(196,98,58,.45)";
+        setTimeout(() => { card.style.boxShadow = ""; }, 1300);
+      }
+    });
+
+    renderMoodTiles();
+    renderProfile();
+    renderResults();
+    renderShortlist();
+    renderReasonChips();
+  </script>
+</body>
+</html>
